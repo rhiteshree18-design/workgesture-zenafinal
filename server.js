@@ -16,11 +16,46 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // ✅ MySQL connection
-const db = mysql.createConnection({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASS || 'Hetu1812',
-    database: process.env.DB_NAME || 'zena'
+// const db = mysql.createConnection({
+//     host: process.env.DB_HOST || 'localhost',
+//     user: process.env.DB_USER || 'root',
+//     password: process.env.DB_PASS || 'Hetu1812',
+//     database: process.env.DB_NAME || 'zena'
+// });
+// ✅ MySQL connection (works on Render + Railway)
+let dbConfig;
+
+if (process.env.DATABASE_URL) {
+    // Parse Railway public URL
+    const url = new URL(process.env.DATABASE_URL);
+    dbConfig = {
+        host: url.hostname,
+        user: url.username,
+        password: url.password,
+        database: url.pathname.replace('/', ''),
+        port: url.port,
+        ssl: {
+            rejectUnauthorized: false // Needed for some MySQL cloud hosts
+        }
+    };
+} else {
+    // Local fallback
+    dbConfig = {
+        host: process.env.DB_HOST || 'localhost',
+        user: process.env.DB_USER || 'root',
+        password: process.env.DB_PASS || 'Hetu1812',
+        database: process.env.DB_NAME || 'zena'
+    };
+}
+
+const db = mysql.createConnection(dbConfig);
+
+db.connect(err => {
+    if (err) {
+        console.error('❌ Database connection failed:', err.stack);
+        return;
+    }
+    console.log('✅ Connected to MySQL database.');
 });
 
 db.connect(err => {
@@ -96,3 +131,4 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log(`🚀 Server running at http://localhost:${port}`);
 });
+
