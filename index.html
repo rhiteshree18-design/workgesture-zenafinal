@@ -12,106 +12,101 @@
     <header>
         <div class="navbar">
             <div class="nav-logo border">
-                <div class="logo">
-                </div>
+                <div class="logo"></div>
             </div>
-            <div class="zena-name">
-                Your Virtual Assitant
-            </div>
-            <div class="nav-home border">
-                <p class="home-text">Home</p>
-            </div>
-            <div class="login-text border" onclick="location.href='login.html'">
-                Login
-            </div>
-            <div class="aboutus-text border" onclick="location.href='about.html'">
-                About Us
-            </div>
-            <div class="nav-contactus border">
-                <p class="contactus-text">Contact Us</p>
-            </div>
-        </div>
+            <div class="zena-name">Your Virtual Assistant</div>
+            <div class="nav-home border">Home</div>
+            <div class="login-text border" onclick="location.href='login.html'">Login</div>
+            <div class="aboutus-text border" onclick="location.href='about.html'">About Us</div>
+            <div class="nav-contactus border">Contact Us</div>
+
+            <!-- 🌙 Dark Mode Toggle -->
+            <div class="toggle-mode" id="modeToggle" title="Toggle Theme">🌙</div>
         </div>
     </header>
+
     <div class="hero-section">
         <div class="hero-msg glow">
             <p class="heading">Experience Touchless Interaction!</p>
             <p class="sub-heading">Control your computer using hand gestures with ZENA</p>
         </div>
-
     </div>
+
     <div id="tryZenaBtn" class="try-zena-button hidden" onclick="location.href='zena.html'">
         Try Zena
     </div>
 
     <section class="features-section">
-
         <div class="feature1box box">
             <div class="feature1content">
-                <h2>
-                    ✋Gesture Control
-                </h2>
-                <p class=" featurepara1 ">Navigate and interact using interactive gestures</p>
+                <h2>✋ Gesture Control</h2>
+                <p>Navigate and interact using interactive gestures</p>
             </div>
         </div>
+
         <div class="feature2box box">
             <div class="feature2content">
-                <h2>
-                    📍 Touchless Navigation
-                </h2>
-                <p class="featurepara2">Scroll, zoom, and open websites without touching your mouse or keyboard.</p>
+                <h2>📍 Touchless Navigation</h2>
+                <p>Scroll, zoom, and open websites without touching your mouse or keyboard.</p>
             </div>
-
         </div>
+
         <div class="feature3box box">
             <div class="feature3content">
-                <h2>
-                    🔊Voice Feedback System
-                </h2>
-                <p class="featurepara3"> ZENA speaks your actions for an engaging and accessible experience.</p>
+                <h2>🔊 Voice Feedback System</h2>
+                <p>ZENA speaks your actions for an engaging and accessible experience.</p>
             </div>
         </div>
-
-
     </section>
+
     <div class="demo-video">
         <p class="demo-content">Watch Zena In Action!</p>
-
     </div>
+
     <div class="video">
         <video controls width="500">
             <source src="demo video.mp4">
         </video>
     </div>
+
     <footer>
         <div class="horizontal-line"></div>
         <p class="footer-text">2025 - ZENA - Gesture AI Assistant</p>
     </footer>
+
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            // ===== Try ZENA Button Logic =====
             const isLoggedIn = localStorage.getItem("isLoggedIn");
-            console.log("isLoggedIn =", isLoggedIn);
-
             const tryZenaBtn = document.getElementById("tryZenaBtn");
+            tryZenaBtn.classList.toggle("hidden", isLoggedIn !== "true");
 
-            // Always hide first
-            tryZenaBtn.classList.add("hidden");
+            // ===== Dark/Light Mode Toggle =====
+            const modeToggle = document.getElementById("modeToggle");
+            modeToggle.addEventListener("click", () => {
+                document.body.classList.toggle("dark-mode");
+                modeToggle.textContent = document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
+            });
 
-            // Show only if user is logged in
-            if (isLoggedIn === "true") {
-                tryZenaBtn.classList.remove("hidden");
-                console.log("User logged in — showing Try Zena button");
-            } else {
-                console.log("User not logged in — hiding Try Zena button");
+            // ===== Scroll Reveal Animation =====
+            const boxes = document.querySelectorAll(".box");
+
+            function revealOnScroll() {
+                boxes.forEach(box => {
+                    const rect = box.getBoundingClientRect();
+                    if (rect.top < window.innerHeight - 100) {
+                        box.classList.add("visible");
+                    }
+                });
             }
+
+            window.addEventListener("scroll", revealOnScroll);
+            revealOnScroll();
+
+            // ===== Smooth Scroll Behavior =====
+            document.documentElement.style.scrollBehavior = "smooth";
         });
-
     </script>
-
-
 </body>
 
-
 </html>
-
-
